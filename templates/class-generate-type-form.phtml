@@ -1,0 +1,18 @@
+<p>i = int, s = string, b = boolean, f = float, a = array, c = callable, n = null, d = DateTime</p>
+<form action="generate" method="post">
+    <?php foreach ($properties as $property) { ?>
+    <div>
+        <label><?= htmlentities($property->getName(), ENT_QUOTES) ?></label>
+        <input type="hidden" name="property[<?= htmlentities($property->getName(), ENT_QUOTES) ?>/scope]" value="<?= htmlentities($property->getScope(), ENT_QUOTES) ?>">
+        <input type="hidden" name="property[<?= htmlentities($property->getName(), ENT_QUOTES) ?>/property]" value="<?= htmlentities($property->getName(), ENT_QUOTES) ?>">
+        <input type="text" name="property[<?= htmlentities($property->getName(), ENT_QUOTES) ?>/type]" value="">
+        <input type="checkbox" name="property[<?= htmlentities($property->getName(), ENT_QUOTES) ?>/enabled]" value="enabled" checked="checked" />
+    </div>
+    <?php } ?>
+    <select name="version">
+        <option value="8">&gt;= 7.0 (get + with)</option>
+        <option value="7">&gt;= 7.0 (get + set)</option>
+        <option value="5">&lt;= 5.6 (get + set)</option>
+    </select>
+    <button>Generate</button>
+</form>

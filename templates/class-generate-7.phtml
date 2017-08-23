@@ -1,0 +1,29 @@
+<pre>
+<?php foreach ($properties as $property) { ?>
+/**
+ * Set <?= strtolower($property->getNameSentence()) ?>
+
+ *
+ * @param <?= htmlentities($property->getType()) ?>
+
+ */
+public function set<?= htmlentities(ucfirst($property->getCamelCaseName()), ENT_QUOTES) ?>(<?= htmlentities($property->getType(), ENT_QUOTES) ?> $<?= htmlentities($property->getCamelCaseName(), ENT_QUOTES) ?>)
+{
+    $this-><?= htmlentities($property->getName(), ENT_QUOTES) ?> = $<?= htmlentities($property->getCamelCaseName(), ENT_QUOTES) ?>;
+}
+
+/**
+ * Get <?= strtolower($property->getNameSentence()) ?>
+
+ *
+ * @return <?= htmlentities($property->getType()) ?>
+
+ */
+public function <?= $property->getType() === 'bool' ? 'is' : 'get' ?><?= htmlentities(ucfirst($property->getCamelCaseName()), ENT_QUOTES) ?>(): <?= htmlentities($property->getType(), ENT_QUOTES) ?>
+
+{
+    return $this-><?= htmlentities($property->getName(), ENT_QUOTES) ?>;
+}
+
+<?php } ?>
+</pre>

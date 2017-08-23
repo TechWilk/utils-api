@@ -1,0 +1,43 @@
+<pre>
+<?php foreach ($properties as $property) { ?>
+/**
+ * With <?= strtolower($property->getNameSentence()) ?>
+
+ *
+ * @param <?= htmlentities($property->getType()) ?>
+
+ * @return self
+ */
+public function with<?= htmlentities(ucfirst($property->getCamelCaseName()), ENT_QUOTES) ?>(<?= htmlentities($property->getType(), ENT_QUOTES) ?> $<?= htmlentities($property->getCamelCaseName(), ENT_QUOTES) ?>): self
+{
+    $instance = clone $this;
+    $instance-><?= htmlentities($property->getName(), ENT_QUOTES) ?> = $<?= htmlentities($property->getCamelCaseName(), ENT_QUOTES) ?>;
+
+    return $instance;
+}
+
+/**
+ * Get <?= strtolower($property->getNameSentence()) ?>
+
+ *
+ * @return <?= htmlentities($property->getType()) ?>
+
+ */
+public function <?= $property->getType() === 'bool' ? 'is' : 'get' ?><?= htmlentities(ucfirst($property->getCamelCaseName()), ENT_QUOTES) ?>(): <?= htmlentities($property->getType(), ENT_QUOTES) ?>
+
+{
+    return $this-><?= htmlentities($property->getName(), ENT_QUOTES) ?>;
+}
+
+<?php } ?>
+/**
+ * Don't allow anything to be set
+ *
+ * @param string $name
+ * @param mixed $value
+ */
+public function __set($name, $value)
+{
+    throw new \InvalidArgumentException(self::class.' is immutable');
+}
+</pre>

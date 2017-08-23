@@ -1,0 +1,45 @@
+<pre>
+<?php foreach ($properties as $property) { ?>
+/**
+ * Set <?= strtolower($property->getNameSentence()) ?>
+
+ *
+ * @param <?= htmlentities($property->getType()) ?>
+
+ */
+public function set<?= htmlentities(ucfirst($property->getName()), ENT_QUOTES) ?>(<?= htmlentities($property->getType(), ENT_QUOTES) ?> $<?= htmlentities($property->getName(), ENT_QUOTES) ?>)
+{
+<?php if ($property->getType() === 'DateTime') { ?>
+    if (!$<?= htmlentities($property->getName(), ENT_QUOTES) ?> instanceof DateTime) {
+        throw new InvalidArgumentException('$<?= htmlentities($property->getName(), ENT_QUOTES) ?> must be an DateTime');
+    }
+
+<?php } else { ?>
+    if (!is_<?= htmlentities($property->getType(), ENT_QUOTES) ?>($<?= htmlentities($property->getName(), ENT_QUOTES) ?>)) {
+        throw new InvalidArgumentException('$<?= htmlentities($property->getName(), ENT_QUOTES) ?> must be a<?= $property->getType() === 'int' ? 'n' : '' ?> <?= htmlentities($property->getType(), ENT_QUOTES) ?>');
+    }
+
+<?php } ?>
+    $this-><?= htmlentities($property->getName(), ENT_QUOTES) ?> = $<?= htmlentities($property->getName(), ENT_QUOTES) ?>;
+}
+
+/**
+ * Get <?= strtolower($property->getNameSentence()) ?>
+
+ *
+ * @return <?= htmlentities($property->getType()) ?>
+
+ */
+public function <?= $property->getType() === 'bool' ? 'is' : 'get' ?><?= htmlentities(ucfirst($property->getName()), ENT_QUOTES) ?>()
+{
+<?php if ($property->getType() === 'DateTime') { ?>
+    if (!$<?= htmlentities($property->getName(), ENT_QUOTES) ?> instanceof DateTime) {
+        $this-><?= htmlentities($property->getName(), ENT_QUOTES) ?> = new DateTime($this-><?= htmlentities($property->getName(), ENT_QUOTES) ?>);
+    }
+
+<?php } ?>
+    return $this-><?= htmlentities($property->getName(), ENT_QUOTES) ?>;
+}
+
+<?php } ?>
+</pre>
