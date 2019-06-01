@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>Slim 3</title>
+        <title>PHP Tools</title>
         <link href='//fonts.googleapis.com/css?family=Lato:300' rel='stylesheet' type='text/css'>
         <style>
             body {
@@ -26,13 +26,9 @@
         </style>
     </head>
     <body>
-        <h1>Slim</h1>
-        <div>a microframework for PHP</div>
+        <h1>PHP Tools</h1>
+        <div>A bunch of stuff that may, or may not, be useful to you as a PHP developer.</div>
 
-        <?php if (isset($name)) : ?>
-            <h2>Hello <?= htmlspecialchars($name); ?>!</h2>
-        <?php else: ?>
-            <p>Try <a href="http://www.slimframework.com">SlimFramework</a>
-        <?php endif; ?>
+        <a href="<?= htmlentities($classGeneratorUrl, ENT_QUOTES) ?>">Getters & setters generator</a>
     </body>
 </html>
