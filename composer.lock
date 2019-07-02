@@ -117,16 +117,16 @@
         },
         {
             "name": "mthaml/mthaml",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/arnaud-lb/MtHaml.git",
-                "reference": "b7e0c72883ee3efcf8b8819210b90496158b00d4"
+                "reference": "b3f791010c385950f5594fb4f406b587c24ced71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/arnaud-lb/MtHaml/zipball/b7e0c72883ee3efcf8b8819210b90496158b00d4",
-                "reference": "b7e0c72883ee3efcf8b8819210b90496158b00d4",
+                "url": "https://api.github.com/repos/arnaud-lb/MtHaml/zipball/b3f791010c385950f5594fb4f406b587c24ced71",
+                "reference": "b3f791010c385950f5594fb4f406b587c24ced71",
                 "shasum": ""
             },
             "require": {
@@ -140,7 +140,7 @@
                 "coffeescript/coffeescript": "~1",
                 "erusev/parsedown": "*",
                 "fluxbb/commonmark": "~1@dev",
-                "gregwar/rst": "~1",
+                "gregwar/rst": "1.0.0",
                 "kzykhys/ciconia": "~1",
                 "leafo/lessphp": "*",
                 "leafo/scssphp": "*",
@@ -184,7 +184,7 @@
             "keywords": [
                 "HAML"
             ],
-            "time": "2015-12-17T09:48:00+00:00"
+            "time": "2019-06-20T15:16:18+00:00"
         },
         {
             "name": "nikic/fast-route",
