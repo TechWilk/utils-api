@@ -16,7 +16,7 @@ class Utilities
         $regex = '/(?<=[a-z])(?=[A-Z])/x';
         $words = preg_split($regex, $camelCaseString);
 
-        return join($words, ' ');
+        return implode(' ', $words);
     }
 
     /**

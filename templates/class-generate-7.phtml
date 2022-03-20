@@ -1,4 +1,3 @@
-<pre>
 <?php foreach ($properties as $property) { ?>
 /**
  * Set <?= strtolower($property->getNameSentence()) ?>
@@ -26,4 +25,3 @@ public function <?= $property->getType() === 'bool' ? 'is' : 'get' ?><?= htmlent
 }
 
 <?php } ?>
-</pre>

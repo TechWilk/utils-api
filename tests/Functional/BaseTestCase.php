@@ -32,12 +32,38 @@ class BaseTestCase extends \PHPUnit\Framework\TestCase
      */
     public function runApp($requestMethod, $requestUri, $requestData = null)
     {
+        return $this->runAppInner($requestMethod, $requestUri, $requestData, false);
+    }
+
+    /**
+     * Process the application given a request method and URI, with JSON headers
+     *
+     * @param string $requestMethod the request method (e.g. GET, POST, etc.)
+     * @param string $requestUri the request URI
+     * @param array|object|null $requestData the request data
+     * @return \Slim\Http\Response
+     */
+    public function runAppJson($requestMethod, $requestUri, $requestData = null)
+    {
+        return $this->runAppInner($requestMethod, $requestUri, $requestData, true);
+    }
+
+    private function runAppInner($requestMethod, $requestUri, $requestData = null, $jsonHeaders = false)
+    {
+        $headers = [];
+        if ($jsonHeaders) {
+            $headers = [
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_ACCEPT' => 'application/json',
+            ];
+        }
+
         // Create a mock environment for testing with
         $environment = Environment::mock(
-            [
+            array_merge([
                 'REQUEST_METHOD' => $requestMethod,
-                'REQUEST_URI' => $requestUri
-            ]
+                'REQUEST_URI' => $requestUri,
+            ], $headers)
         );
 
         // Set up a request object based on the environment
