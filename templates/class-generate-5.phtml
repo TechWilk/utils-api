@@ -1,4 +1,3 @@
-<pre>
 <?php foreach ($properties as $property) { ?>
 /**
  * Set <?= strtolower($property->getNameSentence()) ?>
@@ -7,7 +6,7 @@
  * @param <?= htmlentities($property->getType()) ?>
 
  */
-public function set<?= htmlentities(ucfirst($property->getName()), ENT_QUOTES) ?>(<?= htmlentities($property->getType(), ENT_QUOTES) ?> $<?= htmlentities($property->getName(), ENT_QUOTES) ?>)
+public function set<?= htmlentities(ucfirst($property->getName()), ENT_QUOTES) ?>($<?= htmlentities($property->getName(), ENT_QUOTES) ?>)
 {
 <?php if ($property->getType() === 'DateTime') { ?>
     if (!$<?= htmlentities($property->getName(), ENT_QUOTES) ?> instanceof DateTime) {
@@ -42,4 +41,3 @@ public function <?= $property->getType() === 'bool' ? 'is' : 'get' ?><?= htmlent
 }
 
 <?php } ?>
-</pre>

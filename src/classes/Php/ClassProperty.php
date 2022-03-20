@@ -111,7 +111,7 @@ class ClassProperty
             case 'd':
             case 'date':
             case 'datetime':
-                $this->type = 'DateTime';
+                $this->type = 'DateTimeImmutable';
             break;
             default:
                 $this->type = $type;
