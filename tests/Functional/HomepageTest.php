@@ -12,7 +12,7 @@ class HomepageTest extends BaseTestCase
         $response = $this->runApp('GET', '/');
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('PHP Tools', (string)$response->getBody());
+        $this->assertStringContainsStringIgnoringCase('PHP Tools', (string)$response->getBody());
     }
 
     /**
@@ -23,6 +23,6 @@ class HomepageTest extends BaseTestCase
         $response = $this->runApp('POST', '/', ['test']);
 
         $this->assertEquals(405, $response->getStatusCode());
-        $this->assertContains('Method not allowed', (string)$response->getBody());
+        $this->assertStringContainsStringIgnoringCase('Method not allowed', (string)$response->getBody());
     }
 }
