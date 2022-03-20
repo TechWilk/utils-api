@@ -94,7 +94,27 @@ class ClassBuilderTest extends BaseTestCase
                 ],
             ],
             [
+                'public $bob = 10050;',
+                [
+                    0 => [
+                        'name' => 'bob',
+                        'scope' => 'public',
+                        'type' => 'int',
+                    ],
+                ],
+            ],
+            [
                 'public $bob = 1.0;',
+                [
+                    0 => [
+                        'name' => 'bob',
+                        'scope' => 'public',
+                        'type' => 'float',
+                    ],
+                ],
+            ],
+            [
+                'public $bob = 10.005;',
                 [
                     0 => [
                         'name' => 'bob',

@@ -52,11 +52,15 @@ class ClassBuilder {
             $property = explode(';', $property)[0];
             $property = trim($property);
 
+            unset($properties[$key]);
+            if (empty($property)) {
+                continue;
+            }
+
             $property = new ClassProperty($property);
             $property->setScope($scope ?? 'protected');
             $property->setType($type ?? '');
 
-            unset($properties[$key]);
             $properties[$property->getName()] = $property;
         }
 
@@ -105,9 +109,13 @@ class ClassBuilder {
             return 'bool';
         }
 
-        // integer
-
-        // float
+        if (preg_match('/=\d+\;$/', $string) === 1) {
+            return 'int';
+        }
+        
+        if (preg_match('/=\d+\.\d+\;$/', $string) === 1) {
+            return 'float';
+        }
 
         return null;
     }
