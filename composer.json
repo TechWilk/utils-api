@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": ">=8.1.0",
-        "slim/slim": "^3.1",
+        "slim/slim": "^4.10",
         "monolog/monolog": "^2.4",
         "twig/twig": "^3.3",
         "mthaml/mthaml": "^1.8",
