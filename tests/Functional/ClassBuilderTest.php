@@ -131,7 +131,11 @@ class ClassBuilderTest extends BaseTestCase
      */
     public function testParsingProperties($codeString, $expected)
     {
-        $response = $this->runAppJson('POST', '/api/php/parse', ['properties' => $codeString]);
+        $app = $this->getAppInstance();
+
+        $request = $this->createRequest('POST', '/api/php/parse')
+            ->withParsedBody(['properties' => $codeString]);
+        $response = $app->handle($request);
 
         $this->assertEquals(200, $response->getStatusCode());
 
@@ -227,8 +231,12 @@ CODE
      */
     public function testCodeGenerating($properties, $expected)
     {
-        $response = $this->runAppJson('POST', '/api/php/build', ['properties' => $properties, 'version' => '8']);
+        $app = $this->getAppInstance();
 
+        $request = $this->createRequest('POST', '/api/php/build')
+            ->withParsedBody(['properties' => $properties, 'version' => '8']);
+        $response = $app->handle($request);
+        
         $this->assertEquals(200, $response->getStatusCode());
 
         $responseData = json_decode((string)$response->getBody(), true);

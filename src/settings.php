@@ -1,19 +1,30 @@
 <?php
-return [
-    'settings' => [
-        'displayErrorDetails' => true, // set to false in production
-        'addContentLengthHeader' => false, // Allow the web server to send the content-length header
 
-        // Renderer settings
-        'renderer' => [
-            'template_path' => __DIR__ . '/../templates/',
-        ],
+declare(strict_types=1);
 
-        // Monolog settings
-        'logger' => [
-            'name' => 'slim-app',
-            'path' => __DIR__ . '/../logs/app.log',
-            'level' => \Monolog\Logger::DEBUG,
-        ],
-    ],
-];
+use TechWilk\PhpTools\Settings;
+use TechWilk\PhpTools\SettingsInterface;
+use DI\ContainerBuilder;
+use Monolog\Logger;
+
+return function (ContainerBuilder $containerBuilder) {
+
+    // Global Settings Object
+    $containerBuilder->addDefinitions([
+        SettingsInterface::class => function () {
+            return new Settings([
+                'displayErrorDetails' => true, // Should be set to false in production
+                'logError'            => false,
+                'logErrorDetails'     => false,
+                'logger' => [
+                    'name' => 'slim-app',
+                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
+                    'level' => Logger::DEBUG,
+                ],
+                'renderer' => [
+                    'template_path' => __DIR__ . '/../templates/',
+                ],
+            ]);
+        }
+    ]);
+};

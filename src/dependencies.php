@@ -1,19 +1,37 @@
 <?php
-// DIC configuration
 
-$container = $app->getContainer();
+declare(strict_types=1);
 
-// view renderer
-$container['renderer'] = function ($c) {
-    $settings = $c->get('settings')['renderer'];
-    return new Slim\Views\PhpRenderer($settings['template_path']);
-};
+use TechWilk\PhpTools\SettingsInterface;
+use DI\ContainerBuilder;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Monolog\Processor\UidProcessor;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+use Slim\Views\PhpRenderer;
 
-// monolog
-$container['logger'] = function ($c) {
-    $settings = $c->get('settings')['logger'];
-    $logger = new Monolog\Logger($settings['name']);
-    $logger->pushProcessor(new Monolog\Processor\UidProcessor());
-    $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
-    return $logger;
+return function (ContainerBuilder $containerBuilder) {
+    $containerBuilder->addDefinitions([
+        LoggerInterface::class => function (ContainerInterface $c) {
+            $settings = $c->get(SettingsInterface::class);
+
+            $loggerSettings = $settings->get('logger');
+            $logger = new Logger($loggerSettings['name']);
+
+            $processor = new UidProcessor();
+            $logger->pushProcessor($processor);
+
+            $handler = new StreamHandler($loggerSettings['path'], $loggerSettings['level']);
+            $logger->pushHandler($handler);
+
+            return $logger;
+        },
+        PhpRenderer::class => function (ContainerInterface $c) {
+            $settings = $c->get(SettingsInterface::class);
+           
+            $rendererSettings = $settings->get('renderer');
+            return new PhpRenderer($rendererSettings['template_path']);
+        },
+    ]);
 };
