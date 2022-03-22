@@ -5,7 +5,7 @@ namespace TechWilk\PhpTools\Controller;
 use TechWilk\PhpTools\Php\ClassBuilder;
 use TechWilk\PhpTools\Php\ClassProperty;
 use Slim\Http\Body;
-
+use GuzzleHttp\Psr7\LazyOpenStream;
 class PhpController extends Controller
 {
     public function getClassGenerate($request, $response, $args)
@@ -28,21 +28,15 @@ class PhpController extends Controller
         }, $properties);
         $propertiesFormatted = array_values($propertiesFormatted);
 
-        if ($this->shouldReturnJson($request)) {
-            $body = new Body(fopen('php://temp', 'r+'));
-            $body->write(json_encode([
-                'properties' => $propertiesFormatted,
-            ], JSON_PRETTY_PRINT));
-
-            return $response
-                ->withStatus(200)
-                ->withHeader('Content-type', 'application/json')
-                ->withBody($body);
-        }
-
-        return $this->renderer->render($response, 'class-generate-type-form.phtml', [
+        $body = $response->getBody();
+        $body->write(json_encode([
             'properties' => $propertiesFormatted,
-        ]);
+        ], JSON_PRETTY_PRINT));
+
+        return $response
+            ->withStatus(200)
+            ->withHeader('Content-type', 'application/json')
+            ->withBody($body);
     }
     
     /**
@@ -52,16 +46,7 @@ class PhpController extends Controller
     {
         $data = $request->getParsedBody();
         
-        $propertiesGrouped = [];
-        if ($request->getHeaderLine('Content-Type') === 'application/json') {
-            $propertiesGrouped = $data['properties'];
-        } else {
-            foreach ($data['property'] as $name => $value) {
-                [$propertyName, $key] = explode('/', $name);
-
-                $propertiesGrouped[$propertyName][$key] = $value;
-            }
-        }
+        $propertiesGrouped = $data['properties'] ?? [];
 
         $properties = [];
         foreach ($propertiesGrouped as $propertyArray) {
@@ -94,19 +79,14 @@ class PhpController extends Controller
         ]);
         $code = (string)$renderedResponse->getBody();
 
-        $body = new Body(fopen('php://temp', 'r+'));
-        if ($this->shouldReturnJson($request)) {
-            $body->write(json_encode([
-                'code' => $code,
-            ], JSON_PRETTY_PRINT));
+        $body = new LazyOpenStream('php://temp', 'r+');
+        $body->write(json_encode([
+            'code' => $code,
+        ], JSON_PRETTY_PRINT));
 
-            return $response
-                ->withStatus(200)
-                ->withHeader('Content-type', 'application/json')
-                ->withBody($body);
-        }
-        $body->write('<pre>'.$code.'</pre>');
-
-        return $renderedResponse->withBody($body);
+        return $response
+            ->withStatus(200)
+            ->withHeader('Content-type', 'application/json')
+            ->withBody($body);
     }
 }

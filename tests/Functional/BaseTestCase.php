@@ -1,103 +1,86 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Functional;
 
+use DI\ContainerBuilder;
+use Exception;
+use PHPUnit\Framework\TestCase as PHPUnit_TestCase;
+// use Prophecy\PhpUnit\ProphecyTrait;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
-use Slim\Http\Request;
-use Slim\Http\Response;
-use Slim\Http\Environment;
+use Slim\Factory\AppFactory;
+use Slim\Psr7\Factory\StreamFactory;
+use Slim\Psr7\Headers;
+use Slim\Psr7\Request as SlimRequest;
+use Slim\Psr7\Uri;
 
-/**
- * This is an example class that shows how you could set up a method that
- * runs the application. Note that it doesn't cover all use-cases and is
- * tuned to the specifics of this skeleton app, so if your needs are
- * different, you'll need to change it.
- */
-class BaseTestCase extends \PHPUnit\Framework\TestCase
+class BaseTestCase extends PHPUnit_TestCase
 {
-    /**
-     * Use middleware when running application?
-     *
-     * @var bool
-     */
-    protected $withMiddleware = true;
+    // use ProphecyTrait;
 
     /**
-     * Process the application given a request method and URI
-     *
-     * @param string $requestMethod the request method (e.g. GET, POST, etc.)
-     * @param string $requestUri the request URI
-     * @param array|object|null $requestData the request data
-     * @return \Slim\Http\Response
+     * @return App
+     * @throws Exception
      */
-    public function runApp($requestMethod, $requestUri, $requestData = null)
+    protected function getAppInstance(): App
     {
-        return $this->runAppInner($requestMethod, $requestUri, $requestData, false);
-    }
+        // Instantiate PHP-DI ContainerBuilder
+        $containerBuilder = new ContainerBuilder();
 
-    /**
-     * Process the application given a request method and URI, with JSON headers
-     *
-     * @param string $requestMethod the request method (e.g. GET, POST, etc.)
-     * @param string $requestUri the request URI
-     * @param array|object|null $requestData the request data
-     * @return \Slim\Http\Response
-     */
-    public function runAppJson($requestMethod, $requestUri, $requestData = null)
-    {
-        return $this->runAppInner($requestMethod, $requestUri, $requestData, true);
-    }
+        // Container intentionally not compiled for tests.
 
-    private function runAppInner($requestMethod, $requestUri, $requestData = null, $jsonHeaders = false)
-    {
-        $headers = [];
-        if ($jsonHeaders) {
-            $headers = [
-                'CONTENT_TYPE' => 'application/json',
-                'HTTP_ACCEPT' => 'application/json',
-            ];
-        }
-
-        // Create a mock environment for testing with
-        $environment = Environment::mock(
-            array_merge([
-                'REQUEST_METHOD' => $requestMethod,
-                'REQUEST_URI' => $requestUri,
-            ], $headers)
-        );
-
-        // Set up a request object based on the environment
-        $request = Request::createFromEnvironment($environment);
-
-        // Add request data, if it exists
-        if (isset($requestData)) {
-            $request = $request->withParsedBody($requestData);
-        }
-
-        // Set up a response object
-        $response = new Response();
-
-        // Use the application settings
+        // Set up settings
         $settings = require __DIR__ . '/../../src/settings.php';
-
-        // Instantiate the application
-        $app = new App($settings);
+        $settings($containerBuilder);   
 
         // Set up dependencies
-        require __DIR__ . '/../../src/dependencies.php';
+        $dependencies = require __DIR__ . '/../../src/dependencies.php';
+        $dependencies($containerBuilder);
+
+        // Build PHP-DI Container instance
+        $container = $containerBuilder->build();
+
+        // Instantiate the app
+        AppFactory::setContainer($container);
+        $app = AppFactory::create();
 
         // Register middleware
-        if ($this->withMiddleware) {
-            require __DIR__ . '/../../src/middleware.php';
-        }
+        $middleware = require __DIR__ . '/../../src/middleware.php';
+        $middleware($app);
 
         // Register routes
-        require __DIR__ . '/../../src/routes.php';
+        $routes = require __DIR__ . '/../../src/routes.php';
+        $routes($app);
 
-        // Process the application
-        $response = $app->process($request, $response);
+        return $app;
+    }
 
-        // Return the response
-        return $response;
+    /**
+     * @param string $method
+     * @param string $path
+     * @param array  $headers
+     * @param array  $cookies
+     * @param array  $serverParams
+     * @return Request
+     */
+    protected function createRequest(
+        string $method,
+        string $path,
+        array $headers = ['HTTP_ACCEPT' => 'application/json'],
+        array $cookies = [],
+        array $serverParams = []
+    ): Request {
+        $uri = new Uri('', '', 80, $path);
+        $handle = fopen('php://temp', 'w+');
+        $stream = (new StreamFactory())->createStreamFromResource($handle);
+
+        $h = new Headers();
+        foreach ($headers as $name => $value) {
+            $h->addHeader($name, $value);
+        }
+
+        return new SlimRequest($method, $uri, $h, $cookies, $serverParams, $stream);
     }
 }
