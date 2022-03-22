@@ -4,8 +4,8 @@ namespace TechWilk\PhpTools\Controller;
 
 use TechWilk\PhpTools\Php\ClassBuilder;
 use TechWilk\PhpTools\Php\ClassProperty;
-use Slim\Http\Body;
 use GuzzleHttp\Psr7\LazyOpenStream;
+
 class PhpController extends Controller
 {
     public function getClassGenerate($request, $response, $args)
