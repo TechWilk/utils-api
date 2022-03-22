@@ -3,3 +3,8 @@
 !/logs/README.md
 /config/*
 !/config/*.default.php
+/tmp/cache/*
+!/tmp/cache/.gitkeep
+
+*.log
+*.cache
