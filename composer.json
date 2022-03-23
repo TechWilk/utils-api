@@ -14,7 +14,7 @@
         "monolog/monolog": "^2.4",
         "twig/twig": "^3.3",
         "mthaml/mthaml": "^1.8",
-        "slim/twig-view": "^2.2",
+        "slim/twig-view": "^3.3",
         "slim/php-view": "^3.0",
         "php-di/php-di": "^6.3",
         "slim/psr7": "^1.5",
