@@ -123,6 +123,16 @@ class ClassBuilderTest extends BaseTestCase
                     ],
                 ],
             ],
+            [
+                'DiscountType $type,',
+                [
+                    0 => [
+                        'name' => 'type',
+                        'scope' => 'protected',
+                        'type' => '', //'DiscountType',
+                    ]
+                ]
+            ]
         ];
     }
 
