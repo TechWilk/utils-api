@@ -38,6 +38,23 @@ class ClassBuilder {
                 $beginning = substr($property, 0, $dollarPosition);
                 $scope = $this->parseScopeFromString($beginning);
 
+                // but try and infer any types first
+                $beginningWords = array_reverse(explode(' ', $beginning));
+                foreach ($beginningWords as $word) {
+                    $word = trim($word);
+                    if (empty($word)) {
+                        continue;
+                    }
+
+                    if ($this->parseScopeFromString($word)) {
+                        continue;
+                    }
+
+                    $type = $word;
+
+                    break;
+                }
+
                 $property = substr($property, $dollarPosition + 1);
             }
 

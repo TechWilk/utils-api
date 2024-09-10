@@ -94,6 +94,26 @@ class ClassBuilderTest extends BaseTestCase
                 ],
             ],
             [
+                'public int $bob = 1;',
+                [
+                    0 => [
+                        'name' => 'bob',
+                        'scope' => 'public',
+                        'type' => 'int',
+                    ],
+                ],
+            ],
+            [
+                'public int $bob;',
+                [
+                    0 => [
+                        'name' => 'bob',
+                        'scope' => 'public',
+                        'type' => 'int',
+                    ],
+                ],
+            ],
+            [
                 'public $bob = 10050;',
                 [
                     0 => [
@@ -129,10 +149,30 @@ class ClassBuilderTest extends BaseTestCase
                     0 => [
                         'name' => 'type',
                         'scope' => 'protected',
-                        'type' => '', //'DiscountType',
+                        'type' => 'DiscountType',
                     ]
                 ]
-            ]
+            ],
+            [
+                'private bool $isEnabled',
+                [
+                    0 => [
+                        'name' => 'isEnabled',
+                        'scope' => 'private',
+                        'type' => 'bool',
+                    ]
+                ]
+            ],
+            [
+                '$isEnabled',
+                [
+                    0 => [
+                        'name' => 'isEnabled',
+                        'scope' => 'protected',
+                        'type' => '',
+                    ]
+                ]
+            ],
         ];
     }
 
