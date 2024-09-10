@@ -150,8 +150,8 @@ class ClassBuilderTest extends BaseTestCase
                         'name' => 'type',
                         'scope' => 'protected',
                         'type' => 'DiscountType',
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 'private bool $isEnabled',
@@ -160,8 +160,8 @@ class ClassBuilderTest extends BaseTestCase
                         'name' => 'isEnabled',
                         'scope' => 'private',
                         'type' => 'bool',
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 '$isEnabled',
@@ -170,8 +170,18 @@ class ClassBuilderTest extends BaseTestCase
                         'name' => 'isEnabled',
                         'scope' => 'protected',
                         'type' => '',
-                    ]
-                ]
+                    ],
+                ],
+            ],
+            [
+                'public DiscountType $type, something invalid',
+                [
+                    0 => [
+                        'name' => 'type',
+                        'scope' => 'public',
+                        'type' => 'DiscountType',
+                    ],
+                ],
             ],
         ];
     }

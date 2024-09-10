@@ -67,6 +67,7 @@ class ClassBuilder {
             }
             
             $property = explode(';', $property)[0];
+            $property = explode(' ', $property)[0];
             $property = trim($property);
             $property = trim($property, ',');
             $property = trim($property);
