@@ -16,7 +16,7 @@
         "mthaml/mthaml": "^1.8",
         "slim/twig-view": "^3.3",
         "slim/php-view": "^3.0",
-        "php-di/php-di": "^6.3",
+        "php-di/php-di": "^7.0",
         "slim/psr7": "^1.5",
         "guzzlehttp/psr7": "^2.2"
     },
